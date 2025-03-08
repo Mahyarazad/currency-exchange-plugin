@@ -1,0 +1,107 @@
+/* Add animation for the div to appear from top to bottom */
+@keyframes slideDown {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#currency-exchange {
+    position: sticky;
+    z-index: 10 !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    animation: slideDown 0.5s ease-out; /* Apply the slideDown animation */
+}
+
+/* Existing styles for .currency-info-wrapper */
+#currency-exchange .currency-info-wrapper {
+    display: flex;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#currency-exchange .currency-info-wrapper .currency-rate {
+    align-self: center;
+}
+
+/* Style for the currency exchange container */
+#currency-exchange-container {
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* Style for the currency exchange text */
+#currency-exchange {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* Style for the currency flag wrapper */
+.currency-flag-wrapper {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
+    border-radius: 50%;
+    position: relative;
+    margin-right: 5px;
+}
+
+.currency-flag-wrapper img {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    inset: 0px;
+    color: transparent;
+}
+
+.currency-flag {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the circle */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    #currency-exchange {
+        font-size: 80% !important;
+    }
+
+    #currency-exchange .desktop-text {
+        display: none;
+    }
+
+    .currency-flag-wrapper {
+        align-self: anchor-center;
+    }
+
+    /* Hide original text and replace with modified content */
+    .currency-rate {
+        position: relative;
+        visibility: hidden; /* Hides original content */
+    }
+
+    .currency-rate::after {
+        content: attr(data-currency);
+        visibility: visible;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}
+
+
