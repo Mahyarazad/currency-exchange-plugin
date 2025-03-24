@@ -50,18 +50,19 @@ function currency_exchange_fetch_data() {
         return 'Error fetching exchange rates.';
     }
 
-        
-    $irr_rates = wp_remote_get("https://api-ae.moneyro.app/multi_currency_rate/recent_rates/"); 
+    $irr_response = wp_remote_get("https://api-web.moneyro.app/multi_currency_rate/recent_rates/");
 
-    if (is_wp_error($irr_rates)) {
-        wp_die();
-        return 'Error fetching exchange rates.';
+    if (is_wp_error($irr_response)) {
+        wp_send_json_error(array("error" => "Failed to fetch data."));
     }
-    $rates_detail = json_decode(wp_remote_retrieve_body($irr_rates), true);
+
+    $irr_body = wp_remote_retrieve_body($irr_response);
+        
+    $currency_data = json_decode($irr_body, true);
 
     // Ensure the correct key exists in the response
-    $selling_rate = isset($rates_detail['AED']['when_selling_currency_to_user']['change_in_rial']) 
-                    ? $rates_detail['AED']['when_selling_currency_to_user']['change_in_rial'] 
+    $selling_rate = isset($currency_data['AED']['when_selling_currency_to_user']['change_in_rial']) 
+                    ? $currency_data['AED']['when_selling_currency_to_user']['change_in_rial']     
                     : null;
 
     $data = json_decode(wp_remote_retrieve_body($response), true);
@@ -80,10 +81,10 @@ function currency_exchange_fetch_data() {
                 $currency_image = '';
                 switch ($currency) {
                     case 'USD':
-                        $currency_image = '<div class="currency-flag-wrapper"><img alt="usd" loading="lazy" decoding="async" src="https://www.xe.com/svgs/flags/usd.static.svg" class="currency-flag"></div>';
+                        $currency_image = '<div class="currency-flag-wrapper"><img alt="usd" loading="lazy" decoding="async" src="https://dgland.ae/wp-content/uploads/2025/03/usd.static.svg" class="currency-flag"></div>';
                         break;
                     case 'EUR':
-                        $currency_image = '<div class="currency-flag-wrapper"><img alt="eur" loading="lazy" decoding="async" src="https://www.xe.com/svgs/flags/eur.static.svg" class="currency-flag"></div>';
+                        $currency_image = '<div class="currency-flag-wrapper"><img alt="eur" loading="lazy" decoding="async" src="https://dgland.ae/wp-content/uploads/2025/03/eur.static.svg" class="currency-flag"></div>';
                         break;
                 }
         
@@ -101,7 +102,7 @@ function currency_exchange_fetch_data() {
         
         // Add the AED/IRR exchange rate
         if ($selling_rate !== null) {
-            $currency_image = '<div class="currency-flag-wrapper"><img alt="irr" loading="lazy" decoding="async" src="https://www.xe.com/svgs/flags/irr.static.svg" class="currency-flag"></div>';
+            $currency_image = '<div class="currency-flag-wrapper"><img alt="irr" loading="lazy" decoding="async" src="https://dgland.ae/wp-content/uploads/2025/03/irr.static.svg" class="currency-flag"></div>';
         
             // Get the formatted IRR rate
             $formatted_irr_rate = number_format($selling_rate, 0);
@@ -117,7 +118,7 @@ function currency_exchange_fetch_data() {
         // Remove trailing separator and close the container div
         $exchange_info = rtrim($exchange_info, ' | ') . '</div>';
     
-        echo $exchange_info;
+        echo wp_kses_post($exchange_info);
         wp_die();
     }
     
