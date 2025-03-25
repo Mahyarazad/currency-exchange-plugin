@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
 function currency_exchange_shortcode() {
     ob_start();
     ?>
-        <div id="currency-exchange">Loading exchange rates...</div>
+        <div id="currency-exchange">Loading Exchange Rates...</div>
     <?php
     return ob_get_clean();
 }
@@ -76,7 +76,7 @@ function currency_exchange_fetch_data() {
 
     if ($data['result'] === 'success') {
         $rates = $data['rates'];
-        $exchange_info = '<div id="currency-exchange" class="currency-exchange-container">';
+        $exchange_info = '<div id="currency-exchange-data">';
         $exchange_info .= '<strong class="desktop-text">Exchange Rates: </strong>';
     
         // Prepare the exchange rates to display, focusing on USD, AED, and EUR

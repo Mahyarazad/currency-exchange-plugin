@@ -9,8 +9,15 @@
         opacity: 1;
     }
 }
+#currency-exchange{
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px;
+}
 
-#currency-exchange {
+#currency-exchange-data {
     position: sticky;
     z-index: 10 !important;
     top: 0;
@@ -29,13 +36,13 @@
 }
 
 /* Existing styles for .currency-info-wrapper */
-#currency-exchange .currency-info-wrapper {
+#currency-exchange-data .currency-info-wrapper {
     display: flex;
     margin-left: 10px;
     margin-right: 10px;
 }
 
-#currency-exchange .currency-info-wrapper .currency-rate {
+#currency-exchange-data .currency-info-wrapper .currency-rate {
     align-self: center;
 }
 
@@ -68,7 +75,7 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
-    #currency-exchange {
+    #currency-exchange-data {
         font-size: 80% !important;
     }
 
