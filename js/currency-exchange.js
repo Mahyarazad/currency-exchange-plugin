@@ -1,5 +1,6 @@
 jQuery(document).ready(function($) {
     
+   
     // AJAX call to fetch currency exchange data
     $.ajax({
         url: currencyExchange.ajaxurl, // WordPress provided AJAX URL
@@ -9,7 +10,7 @@ jQuery(document).ready(function($) {
         },
         success: function(response) {
             // Add the returned HTML to the body
-            $('body').prepend(response);
+            $('#currency-exchange').html(response);
 
         },
         error: function(error) {

@@ -11,6 +11,24 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Shortcode to display the currency exchange
+function currency_exchange_shortcode() {
+    ob_start();
+    ?>
+        <div id="currency-exchange">Loading exchange rates...</div>
+    <?php
+    return ob_get_clean();
+}
+
+add_shortcode('currency_exchange', 'currency_exchange_shortcode');
+
+// Automatically output the shortcode at the top of every page
+function currency_exchange_display_auto_injection() {
+    echo currency_exchange_shortcode(); // Directly outputs the HTML
+}
+add_action('wp_body_open', 'currency_exchange_display_auto_injection');
+
+
 function currency_exchange_enqueue_scripts() {
 
     wp_enqueue_script('currency-exchange-js', plugin_dir_url(__FILE__) . 'js/currency-exchange.js', array('jquery'), '1.0', true);
@@ -20,21 +38,11 @@ function currency_exchange_enqueue_scripts() {
     wp_localize_script('currency-exchange-js', 'currencyExchange', array(
         'ajaxurl' => admin_url('admin-ajax.php'), // This will be used to make AJAX requests
     ));
+
 }
 
 add_action('wp_enqueue_scripts', 'currency_exchange_enqueue_scripts');
 
-// Add a shortcode to display the currency exchange
-function currency_exchange_shortcode() {
-    ob_start();
-    ?>
-    <div id="currency-exchange-container">
-        <div id="currency-exchange">Loading exchange rates...</div>
-    </div>
-    <?php
-    return ob_get_clean();
-}
-add_shortcode('currency_exchange', 'currency_exchange_shortcode');
 
 // Fetch the currency exchange rates from the API
 function currency_exchange_fetch_data() {
@@ -46,8 +54,7 @@ function currency_exchange_fetch_data() {
     $response = wp_remote_get('https://open.er-api.com/v6/latest/AED');
     
     if (is_wp_error($response)) {
-        wp_die();
-        return 'Error fetching exchange rates.';
+        wp_send_json_error('Error fetching exchange rates.');
     }
 
     $irr_response = wp_remote_get("https://api-web.moneyro.app/multi_currency_rate/recent_rates/");
@@ -128,29 +135,3 @@ function currency_exchange_fetch_data() {
 add_action('wp_ajax_get_currency_exchange', 'currency_exchange_fetch_data');
 add_action('wp_ajax_nopriv_get_currency_exchange', 'currency_exchange_fetch_data');
 
-// Add a JS handler to update the data
-function currency_exchange_js_handler() {
-    ?>
-    <script type="text/javascript">
-        jQuery(document).ready(function($) {
-            // Fetch the data from the WordPress AJAX endpoint
-            $.ajax({
-                url: '<?php echo admin_url('admin-ajax.php'); ?>',
-                type: 'GET',
-                data: {
-                    action: 'get_currency_exchange'
-                },
-                success: function(response) {
-                    $('#currency-exchange').text(response);
-                },
-                error: function() {
-                    $('#currency-exchange').text('Error fetching exchange rates.');
-                }
-            });
-        });
-    </script>
-    </script>
-    <?php
-}
-
-add_action('wp_footer', 'currency_exchange_js_handler');

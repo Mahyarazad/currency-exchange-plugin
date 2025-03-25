@@ -17,7 +17,11 @@
     left: 0;
     width: 100%;
     background: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px;
+    flex-direction: row;
+    align-items: center;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
@@ -35,20 +39,7 @@
     align-self: center;
 }
 
-/* Style for the currency exchange container */
-#currency-exchange-container {
-    text-align: center;
-    margin: 10px 0;
-}
 
-/* Style for the currency exchange text */
-#currency-exchange {
-    font-size: 14px;
-    font-weight: bold;
-    padding: 10px;
-    flex-direction: row;
-    align-items: center;
-}
 
 /* Style for the currency flag wrapper */
 .currency-flag-wrapper {
@@ -86,7 +77,7 @@
     }
 
     .currency-flag-wrapper {
-        align-self: anchor-center;
+        align-self: center;
     }
 
     /* Hide original text and replace with modified content */
